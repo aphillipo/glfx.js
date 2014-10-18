@@ -129,16 +129,19 @@ function wrap(func) {
     };
 }
 
-exports.canvas = function() {
-    var canvas = document.createElement('canvas');
-    try {
-        gl = canvas.getContext('experimental-webgl', { premultipliedAlpha: false });
-    } catch (e) {
-        gl = null;
+exports.canvas = function(gl) {
+    if(!gl) {
+        var canvas = document.createElement('canvas');
+        try {
+            gl = canvas.getContext('experimental-webgl', { premultipliedAlpha: false });
+        } catch (e) {
+            gl = null;
+        }
+        if (!gl) {
+            throw 'This browser does not support WebGL';
+        }
     }
-    if (!gl) {
-        throw 'This browser does not support WebGL';
-    }
+    
     canvas._ = {
         gl: gl,
         isInitialized: false,
